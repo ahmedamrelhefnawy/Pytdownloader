@@ -22,20 +22,7 @@ def formatted_video_streams(streams):
         streams_list.append({"itag": stream.itag,
                              "res": stream.resolution,
                              "fps": stream.fps,
-                             "extension": stream.mime_type[6:],
-                             "size": stream.filesize_mb})
-
-    return streams_list
-
-
-def formatted_video_streams(streams):
-
-    streams_list = []
-
-    for stream in streams:
-        streams_list.append({"itag": stream.itag,
-                             "res": stream.resolution,
-                             "fps": stream.fps,
+                             "is_progressive": stream.is_progressive,
                              "extension": stream.mime_type[6:],
                              "video_codec": stream.video_codec,
                              "audio_codec": stream.audio_codec,
@@ -72,8 +59,8 @@ def streams_print(streams_list, type_of_streams):
         for stream_index in range(len(streams_list)):
             stream = streams_list[stream_index]
             print(f"{str((stream_index + 1)).zfill(2)
-        }: {stream["res"].center(5)}, {stream["fps"]} FPS - {stream["extension"].ljust(5)} size: {stream["size"]} MB{" (No Audio)" if not stream["audio_codec"] else ""}")
+        }: {stream["res"].center(5)}, {stream["fps"]} FPS - {stream["extension"].ljust(5)} size: {stream["size"]} MB {"(Needs processing)" if not stream["is_progressive"] else ""} {stream["itag"]}")
     else:
         for stream_index in range(len(streams_list)):
             stream = streams_list[stream_index]
-            print(f"{str((stream_index + 1)).zfill(2) }: {stream['ab'].center(7)} - {stream['extension'].ljust(5)} size: {stream['size']} MB")
+            print(f"{str((stream_index + 1)).zfill(2) }: {stream['abr'].center(7)} - {stream['extension'].ljust(5)} size: {stream['size']} MB {stream["itag"]}")

@@ -1,25 +1,47 @@
-<<<<<<< HEAD
-from libs import streams_manipulate, downloader
+from libs.Storing_place import Place
+from libs import downloader
+import tkinter as tk
 from tkinter import filedialog
-from tkinter import filedialog
-=======
-from pytube import YouTube
->>>>>>> 8b041c22e6ec46d95c5ed4f9b9b31c9108e24e3f
 
-def browse_folder():
-    path = filedialog.askdirectory()
-    with open("configuration", 'w') as file:
-        file.write(path)
+def change_default():
+    
+    path = filedialog.askdirectory(title='Select Folder') # Open browse window
+    
+    if path:  # Check if a folder was selected
         
-print('''1: Single Video
+        file = open("configuration", 'w')
+        file.write(path) # Saves the directory to the file
+        
+        file.close() # Closes the file
+
+# Necessary to open browse menu
+root = tk.Tk()
+root.withdraw()  # Hide the main Tkinter window
+
+download_folder = Place()
+
+print(f'''1: Single Video
 2: Playlist
-3: Change download folder''')
+3: Change download folder
+    Current: {download_folder.place}
 
-functions = [downloader.single_download,1 ,browse_folder]
-user_input = int(input("Choose by number: ")) - 1
+4: Close the app''')
 
-<<<<<<< HEAD
-chosen = functions[user_input]
-chosen()
-=======
->>>>>>> 8b041c22e6ec46d95c5ed4f9b9b31c9108e24e3f
+user_input = input("\nChoose by number: ")
+
+while True:
+    if user_input == "1":
+        downloader.single_download(download_folder)
+        break
+    elif user_input == "2":
+        downloader.playlist_download(download_folder)
+    elif user_input == "3":
+        change_default()
+        import YTDownloader
+        break
+    elif user_input == "4":
+        break
+    else:
+        user_input = input("Please enter a valid choice number: ")
+
+root.destroy() # Close the Tkinter window

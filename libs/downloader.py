@@ -1,6 +1,8 @@
 import os
 from pytube import YouTube, Playlist
+from pytube.exceptions import VideoUnavailable, VideoPrivate
 from .streams_manipulate import streams_print, format_streams
+from .on_progress import on_progress
 import ffmpeg
 
 
@@ -11,12 +13,13 @@ For: {downloadable_object.author}
 {"*" * 50}'''
 
 
-def verify(func, downloadable_object):
+def verify(downloadable_object):
     print(download_details(downloadable_object))
     user_input = input(
         "Is this what you have chosen ? (y/n): ").strip().lower()[0]
     while True:
         if user_input == 'y':
+            print("Please wait...")
             return True
         elif user_input == 'n':
             return False
@@ -38,44 +41,127 @@ def get_user_choice(streams):
             print("Invalid input, please choose a number between the numbers above.")
 
 
-def single_download():
-    
-    formats = ["video","audio"]
-    format_index = int(input("\n\n1: Video\n2: Audio Only\n\nChoose Format: ")) - 1
-    
-    selected_format = formats[format_index]
-    
-    user_input = input("Enter video link: ")
-    yt = YouTube(user_input)
+def single_download(place_object):
 
-    while not verify(single_download, yt):
-        user_input = input("Enter video link: ")
-        yt = YouTube(user_input)
+    formats = ["video", "audio"]
+    format_index = int(
+        input("\n\n1: Video\n2: Audio Only\n\nChoose Format: ")) - 1
+
+    selected_format = formats[format_index]
+
+    user_input = input("Enter video link: ")
+    yt = YouTube(url=user_input, on_progress_callback=on_progress,
+                on_complete_callback=place_object.open_folder)
+        
+    try:
+        while not verify(yt):
+            user_input = input("Enter video link: ")
+            yt = YouTube(user_input)
+    
+    except VideoUnavailable:
+        print("\n Error: Selected Video is not available")
+        import YTDownloader
 
     streams = yt.streams.filter(type=selected_format)
-    
+
     chosen_itag = get_user_choice(streams)
 
-    output_path = open("configuration", 'r').readline()
+    output_path = place_object.place
     if not output_path:
         output_path = os.path.join(os.path.expanduser("~"), "Desktop")
-    
+
     stream = streams.get_by_itag(chosen_itag)
-    if stream.is_progressive():
+
+    if stream.is_progressive:
         stream.download(output_path=output_path)
     else:
         download_DASH(streams, chosen_itag, output_path, yt)
+
+
+def playlist_single_download(yt_object, selected_format, itag, res, place_object):
+
+    yt = yt_object
+    
+    streams = yt.streams.filter(type= selected_format)
         
+    output_path = place_object.place
+
+    try:
+        stream = streams.get_by_itag(itag)
+    except:
+        formatted_streams = format_streams(streams)
+        for stream in formatted_streams:
+            if int(stream["res"][0:-1]) <= int(res[0:-1]):
+                stream = streams.get_by_itag(stream["itag"])
+                break
+
+    if stream.is_progressive:
+        stream.download(output_path=output_path)
+    else:
+        download_DASH(streams, itag, output_path, yt)
+
+
+def playlist_download(place_object):
+    
+    formats = ["video", "audio"]
+    format_index = int(
+        input("\n\n1: Video\n2: Audio Only\n\nChoose Format: ")) - 1
+    
+    selected_format = formats[format_index]
+    
+    P_URL = input("Enter playlist URL: ")
+    Plist = Playlist(f'{P_URL}')
+
+    while not verify(Plist):
+        P_URL = input("Enter playlist URL: ")
+        Plist = Playlist(f'{P_URL}')
+
+    video = YouTube(Plist.video_urls[0])                                         ## to skip the private     ##
+    streams = video.streams.filter(type= selected_format)
+    chosen_itag = get_user_choice(streams)
+    
+    for url_index in range(1, len(Plist.video_urls)):
+        
+        print(f"Downloading {video.title} [video: {url_index + 1} from {Plist.length}]")
+        try:                                                             ## This trick is used      ##
+            res = streams.get_by_itag(chosen_itag).resolution
+            playlist_single_download(video= YouTube(Plist.video_urls[url_index]),
+                                     selected_format= selected_format,
+                                     chosen_itag= chosen_itag,
+                                     res= res,
+                                     place_object= place_object)  # I can take the output path from the user.
+                ### I can change the stream here from highest resolution to first    ###
+                ### stream or by detecting the resolution I want or any other stream. ###
+        except VideoUnavailable:                                         ## or nonaccessible videos ##
+            print(f"Video {video.title} is unavailable, skipping..")
+
+    print("Download done.")
+    os.startfile(place_object.place)
+    user_input = input("Another video ? (y/n): ").lower()[0]
+    
+    if user_input == "y":
+        import YTDownloader
+    else:
+        exit()
+
 
 def download_DASH(streams, itag, output_path, yt):
-    video_file = streams.get_by_itag(itag).download(output_path=output_path if output_path else os.path.join(os.path.expanduser("~"), "Desktop"),)
-    audio_file = streams.get_by_itag(140).download(output_path=output_path if output_path else os.path.join(os.path.expanduser("~"), "Desktop"), filename= "audio")
+    video_file = streams.get_by_itag(itag).download(
+        output_path=output_path)
+    try:
+        audio_file = streams.get_by_itag(251).download(output_path=output_path, filename="audio")
+    except:
+        audio_file = streams.get_by_itag(140).download(output_path=output_path, filename="audio")
+
     combine_video_audio(video_file, audio_file, output_path, yt)
-    
-def combine_video_audio(video_file, audio_file, output_file_name, yt):
+
+
+def combine_video_audio(video_file, audio_file, output_file_name):
     video_stream = ffmpeg.input(video_file)
     audio_stream = ffmpeg.input(audio_file)
-    
-    ffmpeg.output(audio_stream, video_stream, output_file_name, acodec='copy', vcodec='copy', loglevel="quiet").run(overwrite_output=True)
-    
+
+    ffmpeg.output(audio_stream, video_stream, output_file_name, acodec='copy',
+                  vcodec='copy', loglevel="quiet").run(overwrite_output=True)
+
     os.remove(audio_file)
+

@@ -6,12 +6,10 @@ def on_progress(stream, chunk, bytes_remaining):   # This function to show the s
 
     total_size = stream.filesize
     total_size_mb = round(total_size / 1000000, 2)
-    print(f"Total_size in Mb: {total_size_mb}")
     bytes_downloaded = total_size - bytes_remaining            # The remaining size in bytes.
     size_downloaded_mb = round(bytes_downloaded / 1000000, 2)  # The remaining size in mb.
     pct_completed = bytes_downloaded / total_size * 100
-    # bar(bytes_downloaded_mb)       # محاولة فاشلة
-    print(f"Status: {round(pct_completed, 2)} %       size downloaded in mb: {round((size_downloaded_mb / 1000000), 2)}")
+    print(f"Downloaded: {round(pct_completed, 2)} %       Remaining: {round((bytes_remaining / 1000000), 2)} MB")
 
 
 def progress_func(stream, chunk, bytes_remaining):
