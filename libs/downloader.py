@@ -6,6 +6,7 @@ from .on_progress import on_progress
 from .modules import ffmpeg
 
 
+
 def download_details(downloadable_object):
     return f'''\n\n{"*" * 50}
 Title:  {downloadable_object.title}
