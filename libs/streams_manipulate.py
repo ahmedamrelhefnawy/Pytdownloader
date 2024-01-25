@@ -76,5 +76,4 @@ def streams_print(streams_list, type_of_streams):
     else:
         for stream_index in range(len(streams_list)):
             stream = streams_list[stream_index]
-            print(f"{str((stream_index + 1)).zfill(2)
-                     }: {stream["abr"].center(7)} - {stream["extension"].ljust(5)} size: {stream["size"]} MB")
+            print(f"{str((stream_index + 1)).zfill(2) }: {stream['ab'].center(7)} - {stream['extension'].ljust(5)} size: {stream['size']} MB")
