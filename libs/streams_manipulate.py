@@ -1,4 +1,3 @@
-
 def format_streams(streams):
     '''Converts the List of streams into a List of dictionaries'''
 

@@ -6,7 +6,9 @@ class Place:
     """Choosing the place of storing youtube videos, and changing this place whenever wanted."""
 
     def __init__(self):
-        self.place = open("configuration",'r').readline()
+        
+        output = open("configuration",'r').readline()
+        self.place = output if output else os.path.join(os.path.expanduser("~"), "Desktop")
 
     # This function is used to open the place where the video has been downloaded.
     def open_folder(self, chunk, chunk_):
@@ -23,8 +25,8 @@ class Place:
     # If the user wanted to change the place of storing, we use this function.
     def choose_place(self):
         
-        import tkinter as tk
-        from tkinter import filedialog
+        from .modules import tkinter as tk
+        from .modules.tkinter import filedialog
         
         root = tk.Tk()
         root.withdraw()  # Hide the main Tkinter window

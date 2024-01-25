@@ -1,15 +1,14 @@
 import os
-from pytube import YouTube, Playlist
-from pytube.exceptions import VideoUnavailable, VideoPrivate
+from .modules.pytube import YouTube, Playlist
+from .modules.pytube.exceptions import VideoUnavailable, VideoPrivate
 from .streams_manipulate import streams_print, format_streams
 from .on_progress import on_progress
-import ffmpeg
 
 
 def download_details(downloadable_object):
     return f'''\n\n{"*" * 50}
 Title:  {downloadable_object.title}
-For: {downloadable_object.author}
+For: {downloadable_object.author if downloadable_object.__class__ == YouTube else downloadable_object.owner}
 {"*" * 50}'''
 
 
@@ -95,7 +94,7 @@ def playlist_single_download(yt_object, selected_format, itag, res, place_object
                 stream = streams.get_by_itag(stream["itag"])
                 break
 
-    if stream.is_progressive:
+    if stream.is_progressive or selected_format == "audio":
         stream.download(output_path=output_path)
     else:
         download_DASH(streams, itag, output_path, yt)
@@ -105,7 +104,7 @@ def playlist_download(place_object):
     
     formats = ["video", "audio"]
     format_index = int(
-        input("\n\n1: Video\n2: Audio Only\n\nChoose Format: ")) - 1
+        input("\n1: Video\n2: Audio Only\n\nChoose Format: ")) - 1
     
     selected_format = formats[format_index]
     
@@ -116,24 +115,25 @@ def playlist_download(place_object):
         P_URL = input("Enter playlist URL: ")
         Plist = Playlist(f'{P_URL}')
 
-    video = YouTube(Plist.video_urls[0])                                         ## to skip the private     ##
+    video = YouTube(Plist.video_urls[0])
     streams = video.streams.filter(type= selected_format)
     chosen_itag = get_user_choice(streams)
-    
-    for url_index in range(1, len(Plist.video_urls)):
+
+    for url_index in range(len(Plist.video_urls)):
         
         print(f"Downloading {video.title} [video: {url_index + 1} from {Plist.length}]")
-        try:                                                             ## This trick is used      ##
+        try:       
+            video = YouTube(Plist.video_urls[url_index], on_progress_callback= on_progress)
             res = streams.get_by_itag(chosen_itag).resolution
-            playlist_single_download(video= YouTube(Plist.video_urls[url_index]),
+            
+            playlist_single_download(yt_object= video,
                                      selected_format= selected_format,
-                                     chosen_itag= chosen_itag,
+                                     itag= chosen_itag,
                                      res= res,
-                                     place_object= place_object)  # I can take the output path from the user.
-                ### I can change the stream here from highest resolution to first    ###
-                ### stream or by detecting the resolution I want or any other stream. ###
-        except VideoUnavailable:                                         ## or nonaccessible videos ##
-            print(f"Video {video.title} is unavailable, skipping..")
+                                     place_object= place_object)
+
+        except VideoUnavailable:
+            print(f"Video {video.title} is unavailable, skipping...")
 
     print("Download done.")
     os.startfile(place_object.place)
@@ -145,7 +145,7 @@ def playlist_download(place_object):
         exit()
 
 
-def download_DASH(streams, itag, output_path, yt):
+def download_DASH(streams, itag, output_path, title):
     video_file = streams.get_by_itag(itag).download(
         output_path=output_path)
     try:
@@ -153,7 +153,7 @@ def download_DASH(streams, itag, output_path, yt):
     except:
         audio_file = streams.get_by_itag(140).download(output_path=output_path, filename="audio")
 
-    combine_video_audio(video_file, audio_file, output_path, yt)
+    combine_video_audio(video_file, audio_file, output_path)
 
 
 def combine_video_audio(video_file, audio_file, output_file_name):

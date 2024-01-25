@@ -1,7 +1,15 @@
+import os
+import sys
+
+parent_dir = os.path.abspath(os.path.dirname(__file__))
+vendor_dir = os.path.join(parent_dir, r'libs\modules')
+
+sys.path.append(vendor_dir)
+
 from libs.Storing_place import Place
 from libs import downloader
-import tkinter as tk
-from tkinter import filedialog
+import libs.modules.tkinter as tk
+from libs.modules.tkinter import filedialog
 
 def change_default():
     
@@ -13,6 +21,7 @@ def change_default():
         file.write(path) # Saves the directory to the file
         
         file.close() # Closes the file
+
 
 # Necessary to open browse menu
 root = tk.Tk()
@@ -41,6 +50,7 @@ while True:
         break
     elif user_input == "4":
         break
+
     else:
         user_input = input("Please enter a valid choice number: ")
 
