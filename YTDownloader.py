@@ -1,10 +1,18 @@
-from pytube import YouTube
-from libs import choices_manipulate
+from libs import streams_manipulate, downloader
+from tkinter import filedialog
+from tkinter import filedialog
 
-yt = YouTube('https://www.youtube.com/shorts/opRm3x9vHH0')
+def browse_folder():
+    path = filedialog.askdirectory()
+    with open("configuration", 'w') as file:
+        file.write(path)
+        
+print('''1: Single Video
+2: Playlist
+3: Change download folder''')
 
-streams = yt.streams.filter(type="video")
-for stream in streams:
-    print(stream)
+functions = [downloader.single_download,1 ,browse_folder]
+user_input = int(input("Choose by number: ")) - 1
 
-choices_manipulate.streams_print(streams)
+chosen = functions[user_input]
+chosen()

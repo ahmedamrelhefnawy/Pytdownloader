@@ -1,3 +1,4 @@
+
 def format_streams(streams):
     '''Converts the List of streams into a List of dictionaries'''
 
@@ -9,6 +10,7 @@ def format_streams(streams):
     else:
         streams_list = formatted_audio_streams(streams)
         streams_list = sorted_streams_desc(streams_list, "audio")
+    
     return streams_list, type_of_streams
 
 
@@ -36,6 +38,7 @@ def formatted_video_streams(streams):
                              "fps": stream.fps,
                              "extension": stream.mime_type[6:],
                              "video_codec": stream.video_codec,
+                             "audio_codec": stream.audio_codec,
                              "size": stream.filesize_mb})
 
     return streams_list
@@ -62,15 +65,14 @@ def sorted_streams_desc(streams_list, type):
         return sorted(streams_list, key=lambda x: (int(x["abr"][:-4]), x["extension"]))[::-1]
 
 
-def streams_print(streams):
+def streams_print(streams_list, type_of_streams):
     '''prints the choices to the user'''
-    streams_list, type_of_streams = format_streams(streams)
-
+    print("\n\n")
     if type_of_streams == "video":
         for stream_index in range(len(streams_list)):
             stream = streams_list[stream_index]
             print(f"{str((stream_index + 1)).zfill(2)
-        }: {stream["res"].center(5)}, {stream["fps"]} FPS - {stream["extension"].ljust(5)} size: {stream["size"]} MB")
+        }: {stream["res"].center(5)}, {stream["fps"]} FPS - {stream["extension"].ljust(5)} size: {stream["size"]} MB{" (No Audio)" if not stream["audio_codec"] else ""}")
     else:
         for stream_index in range(len(streams_list)):
             stream = streams_list[stream_index]
