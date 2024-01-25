@@ -2,9 +2,9 @@ import os
 import sys
 
 parent_dir = os.path.abspath(os.path.dirname(__file__))
-vendor_dir = os.path.join(parent_dir, r'libs\modules')
+modules_dir = os.path.join(parent_dir, r'libs\modules')
 
-sys.path.append(vendor_dir)
+sys.path.append(modules_dir)
 
 from libs.Storing_place import Place
 from libs import downloader
