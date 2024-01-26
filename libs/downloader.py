@@ -4,6 +4,7 @@ from .modules.pytube.exceptions import VideoUnavailable, VideoPrivate
 from .streams_manipulate import streams_print, format_streams
 from .on_progress import on_progress
 from .modules import moviepy
+from moviepy.editor import AudioFileClip, VideoFileClip, concatenate_videoclips
 
 
 
@@ -158,12 +159,16 @@ def download_DASH(streams, itag, output_path, title):
     # combine_video_audio(video_file, audio_file, output_path)
 
 
-# def combine_video_audio(video_file, audio_file, output_file_name):
-#     video_stream = ffmpeg.input(video_file)
-#     audio_stream = ffmpeg.input(audio_file)
+def combine_video_audio(video_file, audio_file, output_file_name):
+    video_stream = VideoFileClip(video_file)
+    audio_stream = AudioFileClip(audio_file)
 
-#     ffmpeg.output(audio_stream, video_stream, output_file_name, acodec='copy',
-#                   vcodec='copy', loglevel="quiet").run(overwrite_output=True)
+    # Concatenate the video stream with the audio stream
+    final_video = video_stream.set_audio(audio_stream)
 
-#     os.remove(audio_file)
+    # Export the final video with audio
+    final_video.write_videofile(output_file_name + ".mp4")
+
+    os.remove(video_file)
+    os.remove(audio_file)
 
