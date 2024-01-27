@@ -10,22 +10,7 @@ from libs.Storing_place import Place
 from libs import downloader
 import libs.modules.tkinter as tk
 from libs.modules.tkinter import filedialog
-
-def change_default():
-    
-    path = filedialog.askdirectory(title='Select Folder') # Open browse window
-    
-    if path:  # Check if a folder was selected
-        
-        file = open("configuration", 'w')
-        file.write(path) # Saves the directory to the file
-        
-        file.close() # Closes the file
-
-
-# Necessary to open browse menu
-root = tk.Tk()
-root.withdraw()  # Hide the main Tkinter window
+from PyQt5.QtWidgets import QFileDialog
 
 download_folder = Place()
 
@@ -45,13 +30,13 @@ while True:
     elif user_input == "2":
         downloader.playlist_download(download_folder)
     elif user_input == "3":
-        change_default()
-        import YTDownloader
-        break
+        download_folder.change_default()
+        print(f"\nDefault Folder is set to:\n{download_folder.place}")
+        user_input = input("\nChoose another Option: ")
+
     elif user_input == "4":
         break
 
     else:
-        user_input = input("Please enter a valid choice number: ")
+        user_input = input("Please enter a valid choice number:")
 
-root.destroy() # Close the Tkinter window

@@ -3,8 +3,7 @@ from .modules.pytube import YouTube, Playlist
 from .modules.pytube.exceptions import VideoUnavailable, VideoPrivate
 from .streams_manipulate import streams_print, format_streams
 from .on_progress import on_progress
-from .modules import moviepy
-from moviepy.editor import AudioFileClip, VideoFileClip, concatenate_videoclips
+from .modules.moviepy.editor import AudioFileClip, VideoFileClip
 
 
 
@@ -80,13 +79,14 @@ def single_download(place_object):
         download_DASH(streams, chosen_itag, output_path, yt)
 
 
-def playlist_single_download(yt_object, selected_format, itag, res, place_object):
+def playlist_single_download(yt_object, selected_format, itag, res, place_object, playlist_name):
 
     yt = yt_object
     
     streams = yt.streams.filter(type= selected_format)
-        
-    output_path = place_object.place
+    
+    playlist_name = playlist_name
+    output_path = place_object.place + f"\{playlist_name}"
 
     try:
         stream = streams.get_by_itag(itag)
@@ -100,7 +100,7 @@ def playlist_single_download(yt_object, selected_format, itag, res, place_object
     if stream.is_progressive or selected_format == "audio":
         stream.download(output_path=output_path)
     else:
-        download_DASH(streams, itag, output_path, yt)
+        download_DASH(streams, itag, output_path, yt.title)
 
 
 def playlist_download(place_object):
@@ -121,7 +121,7 @@ def playlist_download(place_object):
     video = YouTube(Plist.video_urls[0])
     streams = video.streams.filter(type= selected_format)
     chosen_itag = get_user_choice(streams)
-
+    
     for url_index in range(len(Plist.video_urls)):
         
         print(f"Downloading {video.title} [video: {url_index + 1} from {Plist.length}]")
@@ -133,7 +133,8 @@ def playlist_download(place_object):
                                      selected_format= selected_format,
                                      itag= chosen_itag,
                                      res= res,
-                                     place_object= place_object)
+                                     place_object= place_object,
+                                     playlist_name= Playlist.title)
 
         except VideoUnavailable:
             print(f"Video {video.title} is unavailable, skipping...")
@@ -156,7 +157,7 @@ def download_DASH(streams, itag, output_path, title):
     except:
         audio_file = streams.get_by_itag(140).download(output_path=output_path, filename="audio")
 
-    # combine_video_audio(video_file, audio_file, output_path)
+    combine_video_audio(video_file, audio_file, output_path)
 
 
 def combine_video_audio(video_file, audio_file, output_file_name):
@@ -171,4 +172,3 @@ def combine_video_audio(video_file, audio_file, output_file_name):
 
     os.remove(video_file)
     os.remove(audio_file)
-

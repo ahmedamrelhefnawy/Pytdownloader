@@ -12,12 +12,12 @@ def on_progress(stream, chunk, bytes_remaining):   # This function to show the s
     print(f"Downloaded: {round(pct_completed, 2)} %       Remaining: {round((bytes_remaining / 1000000), 2)} MB")
 
 
-def progress_func(stream, chunk, bytes_remaining):
-    """on_progress_Callback function"""
+# def progress_func(stream, chunk, bytes_remaining):
+#     """on_progress_Callback function"""
 
-    curr = stream.filesize - bytes_remaining
-    print(f"remaining size is : {round((bytes_remaining/1000000), 2)}")
-    done = int(50 * curr / stream.filesize)
-    sys.stdout.write("\r[{}{}] ".format('😁' * done, ' ' * (50-done)) )
-    print("")
-    sys.stdout.flush()
+#     curr = stream.filesize - bytes_remaining
+#     print(f"remaining size is : {round((bytes_remaining/1000000), 2)}")
+#     done = int(50 * curr / stream.filesize)
+#     sys.stdout.write("\r[{}{}] ".format('😁' * done, ' ' * (50-done)) )
+#     print("")
+#     sys.stdout.flush()

@@ -25,6 +25,7 @@ class Place:
     # If the user wanted to change the place of storing, we use this function.
     def choose_place(self):
         
+        # TODO: replace tkinter with PyQt5
         from .modules import tkinter as tk
         from .modules.tkinter import filedialog
         
@@ -32,3 +33,22 @@ class Place:
         root.withdraw()  # Hide the main Tkinter window
         
         self.place = filedialog.askdirectory() # Open browse window
+    
+    def change_default(self):
+        import sys
+        from PyQt5.QtWidgets import QFileDialog, QApplication
+        
+        app = QApplication(sys.argv)
+        
+        folder_dialog = QFileDialog()
+        folder_dialog.setFileMode(QFileDialog.Directory)
+
+        if folder_dialog.exec_():
+            selected_folder = folder_dialog.selectedFiles()[0]
+            self.place = selected_folder
+            
+            file = open('configuration', 'w')
+            file.write(selected_folder)
+            file.close()
+        
+        app.quit()
