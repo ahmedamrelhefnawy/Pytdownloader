@@ -22,13 +22,13 @@ class Place:
 
     @staticmethod
     def ask_change_place():
-        user_input = User.get_bool_input("Would you like to download it in a different folder ?")
+        user_input = User.get_bool_input("Would you like to download it in a different folder ? (y/n): ")
         if user_input:
             Place.change_place()
         
     # If the user wanted to change the place of storing, we use this function.
     @staticmethod
-    def ask_change_place():
+    def change_place():
         
         import sys
         from PyQt5.QtWidgets import QFileDialog, QApplication

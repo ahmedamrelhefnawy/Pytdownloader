@@ -7,19 +7,19 @@ class User:
         User.u_input = input(message)
         User.__int_check(u_range)
 
-        return User.u_input
+        return int(User.u_input)
 
     def __int_check(u_range: list[int] or range) -> None:
         while True:
             try:
-                if int(User.u_input)-1 in u_range:
+                if int(User.u_input) in u_range:
                     break
                 else:
                     User.u_input = input(
                         f"Invalid Input, Please choose a number from {u_range[0]} to {u_range[-1]}: ").strip().lower()
             except ValueError:
                 User.u_input = input(
-                    f"Please enter a number: ").strip().lower()
+                        f"Invalid Input, Please choose a number from {u_range[0]} to {u_range[-1]}: ").strip().lower()
 
     @staticmethod
     def get_bool_input(message: str) -> bool:

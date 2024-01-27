@@ -1,4 +1,4 @@
-from .modules.pytube import Stream
+from modules.pytube import Stream
 from Storing_place import Place
 
 class Manipulate_stream:
@@ -21,7 +21,7 @@ class Manipulate_stream:
         size_mb = stream.filesize_mb
         is_adaptive = stream.is_adaptive
         
-        return f"{res} - {fps} FPS  {extension}  Size: {size_mb} MB  {"( Needs Processing )" if is_adaptive else ''}"
+        return f"{res.center(5)} - {fps} FPS  {extension.ljust(5)}  Size: {size_mb} MB  {"( Needs Processing )" if is_adaptive else ''}"
 
     
     def __audio_stream_info(stream: Stream):
@@ -31,7 +31,7 @@ class Manipulate_stream:
         size_mb = stream.filesize_mb
         is_adaptive = stream.is_adaptive
         
-        return f"{abr} - {extension}  Size: {size_mb} MB"
+        return f"{abr.center(7)} - {extension.ljust(5)}  Size: {size_mb} MB"
     
     # @staticmethod
     # def download_stream_printed(stream: Stream):
