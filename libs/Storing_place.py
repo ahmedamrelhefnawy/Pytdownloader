@@ -5,12 +5,12 @@ class Place:
     """on_complete_Callback function"""
     """Choosing the place of storing youtube videos, and changing this place whenever wanted."""
     
-    place = open("configuration",'r').readline() if open("configuration",'r').readline() else os.path.join(os.path.expanduser("~"), "Desktop")
+    place = open("./cache/configuration",'r').readline() if open("./cache/configuration",'r').readline() else os.path.join(os.path.expanduser("~"), "Desktop")
 
     @staticmethod
     def open_folder(chunk, chunk_):
         
-        print("Download done")
+        print("\nDownload done")
         os.startfile(Place.place)
         user_input = input("Another video ? (y/n): ").lower()[0]
         

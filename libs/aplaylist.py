@@ -55,7 +55,7 @@ class aplaylist:
     def ask_download_all(self, dl_format):
 
         # Getting common streams
-        common_streams = self.get_common_streams(dl_format)
+        common_streams = self.get_common_streams(self.videos, dl_format)
 
         # Asking the user to choose a stream
         chosen_stream = self.ask_choose_stream(common_streams)
@@ -81,7 +81,7 @@ class aplaylist:
                 range(user_from - 1, user_to))
 
             # Getting common streams
-            common_streams = self.get_common_streams(dl_format)
+            common_streams = self.get_common_streams(selected_videos, dl_format)
 
             # Asking the user to choose a stream
             chosen_stream = self.ask_choose_stream(common_streams)
@@ -114,7 +114,7 @@ class aplaylist:
             selected_videos = self.get_selected_videos(selected_indices)
 
             # Getting common streams
-            common_streams = self.get_common_streams(dl_format)
+            common_streams = self.get_common_streams(selected_videos, dl_format)
 
             # Asking the user to choose a stream
             chosen_stream = self.ask_choose_stream(common_streams)
@@ -149,12 +149,12 @@ class aplaylist:
 
         return selected_videos
 
-    def get_common_streams(self, dl_format: str) -> list[Stream]:
+    def get_common_streams(self, selected_videos: list[YouTube], dl_format: str) -> list[Stream]:
 
         common_streams = []
 
-        for video in (self.videos[0], self.videos[self.length//2], self.videos[-1]):
-            for stream in video.streams.filter(type=dl_format):
+        for video in (selected_videos[0], selected_videos[len(selected_videos)//2], selected_videos[-1]):
+            for stream in video.get_available_streams(dl_format):
 
                 if not self.stream_itag_exist(stream, common_streams):
                     common_streams.append(stream)
