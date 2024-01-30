@@ -1,6 +1,6 @@
 class User:
     '''Used to interact with the user and make sure that his input is correct logically'''
-    u_input = 0
+    u_input = 'False'
 
     @staticmethod
     def get_int_input(message: str, u_range: list[int] or range) -> int:
@@ -38,5 +38,6 @@ class User:
                 User.u_input = input(
                     "Invalid Input, Please enter either 'Y' as Yes or 'N' as No: ").strip().lower()[0]
 
+        
 if __name__ == "__main__":
-    print(User.get_bool_input("test message: "))
+    print(User.get_int_input("test message: ",range(0,5)))

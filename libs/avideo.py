@@ -1,3 +1,4 @@
+import os
 from User import User
 from modules.pytube import YouTube, Stream
 from manipulate_stream import Manipulate_stream
@@ -10,12 +11,16 @@ class avideo:
         self.yt = yt_obj
         self.video_streams = yt_obj.streams.filter(type= "video").order_by("resolution")[::-1]
         self.audio_streams = yt_obj.streams.filter(type= "audio").order_by("abr")[::-1]
+        self.title = yt_obj.title
+        self.author = yt_obj.author
+        self.length = yt_obj.length
 
     @property
     def info(self):
-        return f"Title: {self.yt.title}\nFor: {self.yt.author}\nLength: {self.yt.length}"
+        return f"Title: {self.title}\nFor: {self.author}\nLength: {self.length}"
 
     def ask_download(self):
+        os.system("cls" if os.name == "nt" else "clear")
         user_input = User.get_int_input("1: Video\n2: Audio\nChoose by number: ", [1, 2])
         print("\n")
         
@@ -25,6 +30,7 @@ class avideo:
             self.ask_download_audio()
 
     def ask_download_video(self):
+        os.system("cls" if os.name == "nt" else "clear")
         self.print_video_streams()
 
         chosen_index = User.get_int_input("\nSelect a format: ",
@@ -36,13 +42,19 @@ class avideo:
 
     def ask_download_audio(self):
         self.print_audio_streams()
-
+        
         chosen_index = User.get_int_input("\nSelect a format: ",
             range(1, len(self.audio_streams) + 1))
 
         Place.ask_change_place()
 
         self.download_audio(self.audio_streams[chosen_index - 1])
+
+    def download(self, stream: Stream):
+        if stream.type == 'video':
+            self.download_video(stream)
+        else:
+            self.download_audio(stream)
 
     def download_video(self, stream: Stream):
         chosen_itag = stream.itag
@@ -124,6 +136,9 @@ class avideo:
         for stream_index in range(len(self.audio_streams)):
             print(
                 f"{str(stream_index + 1).zfill(2)}: {Manipulate_stream.stream_info(self.audio_streams[stream_index])}")
+
+    def get_available_streams(self, download_type: str):
+        return self.yt.streams.filter(type= download_type)
 
 if __name__ == "__main__":
     

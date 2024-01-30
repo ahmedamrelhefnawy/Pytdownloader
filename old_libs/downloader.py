@@ -2,7 +2,7 @@ import os
 from .modules.pytube import YouTube, Playlist
 from .modules.pytube.exceptions import VideoUnavailable, VideoPrivate
 from .streams_manipulate import streams_print, format_streams
-from .on_progress import on_progress
+from ..libs.on_progress import on_progress
 from .modules.moviepy.editor import AudioFileClip, VideoFileClip
 
 
