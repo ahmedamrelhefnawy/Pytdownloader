@@ -12,14 +12,14 @@ class User:
     def __int_check(u_range: list[int] or range) -> None:
         while True:
             try:
-                if int(User.u_input) in u_range:
+                if int(User.u_input.strip().lower()) in u_range:
                     break
                 else:
                     User.u_input = input(
-                        f"Invalid Input, Please choose a number from {u_range[0]} to {u_range[-1]}: ").strip().lower()
+                        f"Invalid Input, Please choose a number from {u_range[0]} to {u_range[-1]}: ")
             except ValueError:
                 User.u_input = input(
-                        f"Invalid Input, Please choose a number from {u_range[0]} to {u_range[-1]}: ").strip().lower()
+                        f"Invalid Input, Please choose a number from {u_range[0]} to {u_range[-1]}: ")
 
     @staticmethod
     def get_bool_input(message: str) -> bool:
@@ -32,11 +32,11 @@ class User:
     def __bool_check() -> None:
 
         while True:
-            if User.u_input in ['y', 'n']:
+            if User.u_input.strip().lower() in ['y', 'n']:
                 break
             else:
                 User.u_input = input(
-                    "Invalid Input, Please enter either 'Y' as Yes or 'N' as No: ").strip().lower()[0]
+                    "Invalid Input, Please enter either 'Y' as Yes or 'N' as No: ")[0]
 
         
 if __name__ == "__main__":

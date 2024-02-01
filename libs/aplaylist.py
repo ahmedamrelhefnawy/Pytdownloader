@@ -1,13 +1,14 @@
 import os
 
-from User import User
+from .User import User
 
-from modules.pytube import Playlist, YouTube, Stream
-from avideo import avideo
-from manipulate_stream import Manipulate_stream
+from .modules.pytube import Playlist, YouTube, Stream
+from .avideo import avideo
+from .manipulate_stream import Manipulate_stream
 
-from Storing_place import Place
-from on_progress import on_progress
+from .Storing_place import Place
+from .on_progress import on_progress
+
 
 class aplaylist:
 
@@ -24,7 +25,7 @@ class aplaylist:
         return f"Title: {self.playlist.title}\nFor: {self.playlist.owner}\nLength: {self.playlist.length} Videos"
 
     def print_videos(self):
-        for i in range(len(self.videos)):
+        for i in range(self.length):
             print(f"{i+1}: {self.videos[i].title}")
 
     def choose_format(self):
@@ -32,9 +33,9 @@ class aplaylist:
             "1: Video\n2: Audio\nChoose by number: ", [1, 2])
 
         if user_input == 1:
-            self.ask_download_mode('video')
+            return 'video'
         else:
-            self.ask_download_mode('audio')
+            return 'audio'
 
     def ask_download_mode(self, dl_format: str):
         os.system("cls" if os.name == "nt" else "clear")
@@ -54,40 +55,41 @@ class aplaylist:
 
     def ask_download_all(self, dl_format):
 
+        print("\nLoading data, Please wait...")
+
         # Getting common streams
-        common_streams = self.get_common_streams(self.videos, dl_format)
+        common_streams = self.get_common_streams(range(self.length), dl_format)
 
         # Asking the user to choose a stream
         chosen_stream = self.ask_choose_stream(common_streams)
 
         # Downloading selected items
-        self.download_videos(chosen_stream, self.videos)
+        self.download_videos(chosen_stream, range(len(self.length)))
 
     def ask_range_download(self, dl_format):
 
         user_from = User.get_int_input(
-            "Download From: ", range(1, len(self.videos) + 1))
+            "Download From: ", range(1, self.length + 1))
+
         user_to = User.get_int_input(
-            "Download to: ", range(user_from, len(self.videos) + 1))
+            "Download to: ", range(user_from, self.length + 1))
 
         # Making sure
-        self.print_selected_videos(range(user_from - 1, user_to))
+        self.print_range_of_videos(range(user_from - 1, user_to))
+
         if User.get_bool_input("\nAre these the videos you have selected ? (Y/n): "):
 
-            print("\nPlease wait...")
-
-            # Getting videos by indices
-            selected_videos = self.get_selected_videos(
-                range(user_from - 1, user_to))
+            print("\nLoading data, Please wait...")
 
             # Getting common streams
-            common_streams = self.get_common_streams(selected_videos, dl_format)
+            common_streams = self.get_common_streams(
+                range(user_from - 1, user_to), dl_format)
 
             # Asking the user to choose a stream
             chosen_stream = self.ask_choose_stream(common_streams)
 
             # Downloading selected items
-            self.download_videos(chosen_stream, selected_videos)
+            self.download_videos(chosen_stream, range(user_from - 1, user_to))
 
         else:
             self.ask_range_download(dl_format)
@@ -100,7 +102,7 @@ class aplaylist:
         # Saving indices
         selected_indices = []
         for index in user_input:
-            if int(index) < len(self.videos) + 1:
+            if int(index) < self.length + 1:
                 selected_indices.append(int(index) - 1)
 
         # Making sure
@@ -108,69 +110,71 @@ class aplaylist:
 
         if User.get_bool_input("Are these the videos you have selected ? (Y/n): "):
 
-            print("\nPlease wait...")
-
-            # Getting videos by indices
-            selected_videos = self.get_selected_videos(selected_indices)
+            print("\nLoading data, Please wait...")
 
             # Getting common streams
-            common_streams = self.get_common_streams(selected_videos, dl_format)
+            common_streams = self.get_common_streams(
+                selected_indices, dl_format)
 
             # Asking the user to choose a stream
             chosen_stream = self.ask_choose_stream(common_streams)
 
             # Downloading selected items
-            self.download_videos(chosen_stream, selected_videos)
+            self.download_videos(chosen_stream, selected_indices)
         else:
             self.ask_selective_download(dl_format)
 
-    def download_videos(self, chosen_stream: Stream, selected_videos: list[avideo]):
+    def download_videos(self, chosen_stream: Stream, indices_list: list[int]):
 
-        for video in selected_videos:
+        length = len(indices_list)
+
+        for index in range(len(indices_list)):
+
+            url = self.video_urls[indices_list[index]]
+            video = avideo(YouTube(url=url, on_progress_callback=on_progress))
+
+            print(f"Downloading: {video.title} [video: {
+                  index + 1} from {length}]")
             video.download(chosen_stream)
 
-    def get_selected_videos(self, indices_list: list[int]):
-        selected_videos = []
-
-        for index in indices_list:
-            url = self.video_urls[index]
-            selected_videos.append(avideo(YouTube(  url= url,
-                                                    on_progress_callback= on_progress,
-                                                    on_complete_callback= Place.open_folder)))
-
-        return selected_videos
+    def print_range_of_videos(self, indices_list: list[int]):
+        if len(indices_list) < 7:
+            self.print_selected_videos(indices_list)
+        else:
+            print(f"\nFrom Video: {self.videos[indices_list[0]].title}\n.\n.\n{self.videos[indices_list[len(
+                indices_list)//2]].title}\n.\n.\nTo Video: {self.videos[indices_list[-1]].title}")
 
     def print_selected_videos(self, indices_list: list[int]):
         selected_videos = []
-
-        for index in sorted(indices_list):
+        for index in sorted(set(indices_list)):
             video_of_index = self.videos[index]
             print(f"{index + 1}: {video_of_index.title}")
 
         return selected_videos
 
-    def get_common_streams(self, selected_videos: list[YouTube], dl_format: str) -> list[Stream]:
+    def get_common_streams(self, selected_indices: list[int], dl_format: str) -> list[Stream]:
 
         common_streams = []
 
-        for video in (selected_videos[0], selected_videos[len(selected_videos)//2], selected_videos[-1]):
-            for stream in video.get_available_streams(dl_format):
+        for index in (selected_indices[0], selected_indices[len(selected_indices)//2], selected_indices[-1]):
+            for stream in avideo(self.videos[index]).get_available_streams(dl_format):
 
                 if not self.stream_itag_exist(stream, common_streams):
                     common_streams.append(stream)
-        
+
         if common_streams:
             if common_streams[0].type == 'video':
-                return sorted(common_streams, key= lambda stream: int(stream.resolution[:-1]))[::-1]
+                return sorted(common_streams, key=lambda stream: int(stream.resolution[:-1]))[::-1]
             else:
-                return sorted(common_streams, key= lambda stream: int(stream.abr[:-4]))[::-1]
+                return sorted(common_streams, key=lambda stream: int(stream.abr[:-4]))[::-1]
 
     def print_streams(self, streams: list[Stream]):
-        
+
         os.system("cls" if os.name == "nt" else "clear")
-        
-        for index in range(len(streams)):
-            print(f"{index + 1}: {Manipulate_stream.stream_info(streams[index])}")
+
+        for i in range(len(streams)):
+            print(
+                f"{str(i + 1).zfill(2)}: {Manipulate_stream.stream_info(streams[i], False)}")
 
     def stream_itag_exist(self, test_stream: Stream, list_of_streams: list[Stream]) -> bool:
 
@@ -190,5 +194,5 @@ class aplaylist:
 
 if __name__ == "__main__":
     myplaylist = aplaylist(Playlist(
-        "https://www.youtube.com/playlist?list=PLpl5euYYltTTt4vk9acl6bwYPWEwkR4JR"))
+        "https://www.youtube.com/playlist?list=PLDoPjvoNmBAyE_gei5d18qkfIe-Z8mocs"))
     myplaylist.choose_format()

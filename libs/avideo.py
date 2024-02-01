@@ -1,9 +1,8 @@
 import os
-from User import User
-from modules.pytube import YouTube, Stream
-from manipulate_stream import Manipulate_stream
-from Storing_place import Place
-
+from .User import User
+from .modules.pytube import YouTube, Stream
+from .manipulate_stream import Manipulate_stream
+from .Storing_place import Place
 
 class avideo:
 
@@ -41,6 +40,7 @@ class avideo:
         self.download_video(self.video_streams[chosen_index - 1])
 
     def ask_download_audio(self):
+        os.system("cls" if os.name == "nt" else "clear")
         self.print_audio_streams()
         
         chosen_index = User.get_int_input("\nSelect a format: ",
@@ -50,19 +50,13 @@ class avideo:
 
         self.download_audio(self.audio_streams[chosen_index - 1])
 
-    def download(self, stream: Stream):
-        if stream.type == 'video':
-            self.download_video(stream)
-        else:
-            self.download_audio(stream)
-
     def download_video(self, stream: Stream):
         chosen_itag = stream.itag
         chosen_stream = self.yt.streams.get_by_itag(chosen_itag)
 
         if chosen_stream:
             if chosen_stream.is_adaptive:
-                self.download_adaptive(stream)
+                self.download_adaptive(chosen_stream)
             else:
                 chosen_stream.download(output_path=Place.place)
 
@@ -91,6 +85,12 @@ class avideo:
 
             chosen_stream.download(output_path=Place.place)
 
+    def download(self, stream: Stream):
+        if stream.type == 'video':
+            self.download_video(stream)
+        else:
+            self.download_audio(stream)
+
     def __get_closest_video_stream(self, stream: Stream):
         res = int(stream.resolution[:-1])
 
@@ -113,17 +113,21 @@ class avideo:
 
     def download_adaptive(self, stream: Stream):
         
-        video_name = f"video.{stream.subtype}"
-        stream.download(output_path=Place.place, filename=video_name)
-
+        # Downloading video and saving its path
+        video_path = stream.download(output_path=Place.place)
+        video_path = video_path.replace("\\", '/')
+        
+        # Downloading audio and saving its path
         audio = self.yt.streams.get_audio_only()
         audio_name = f"audio.{audio.subtype}"
-        audio.download(output_path=Place.place, filename=audio_name)
-
-        from video_manipulation import combine_video_audio
-        combine_video_audio(video_file=f"{Place.place}\\{video_name}",
-                            audio_file=f"{Place.place}\\{audio_name}",
-                            output_file_name=f"{Place.place}\\{stream.title}")
+        audio.download(output_path=Place.place, filename= audio_name)
+        
+        
+        from .video_manipulation import combine_video_audio
+        combine_video_audio(
+                            video_file= video_path,
+                            audio_file= f"{Place.place}/{audio_name}",
+                            )
 
     def print_video_streams(self):
 
@@ -138,7 +142,10 @@ class avideo:
                 f"{str(stream_index + 1).zfill(2)}: {Manipulate_stream.stream_info(self.audio_streams[stream_index])}")
 
     def get_available_streams(self, download_type: str):
-        return self.yt.streams.filter(type= download_type)
+        if download_type == 'video':
+            return self.video_streams
+        else:
+            return self.audio_streams
 
 if __name__ == "__main__":
     

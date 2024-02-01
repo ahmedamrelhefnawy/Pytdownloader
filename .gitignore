@@ -3,3 +3,5 @@ test*
 .vscode
 temp
 *.code-workspace
+shared libs
+old_libs

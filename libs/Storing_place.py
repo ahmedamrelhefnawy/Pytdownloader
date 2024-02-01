@@ -1,5 +1,5 @@
 import os
-from User import User
+from .User import User
         
 class Place:
     """on_complete_Callback function"""
@@ -12,17 +12,10 @@ class Place:
         
         print("\nDownload done")
         os.startfile(Place.place)
-        user_input = input("Another video ? (y/n): ").lower()[0]
-        
-        #TODO: Replace this with code starter
-        if user_input == "y":
-            import YTDownloader
-        else:
-            exit()
 
     @staticmethod
     def ask_change_place():
-        user_input = User.get_bool_input("Would you like to download it in a different folder ? (y/n): ")
+        user_input = User.get_bool_input("Would you like to download it in a different folder ? (Y/n): ")
         if user_input:
             Place.change_place()
         
