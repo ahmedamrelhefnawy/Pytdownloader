@@ -50,7 +50,7 @@ class Place:
             
             Place.place = folder_dialog.selectedFiles()[0]
             
-            file = open('configuration', 'w')
+            file = open('./cache/configuration', 'w')
             file.write(Place.place)
             file.close()
         

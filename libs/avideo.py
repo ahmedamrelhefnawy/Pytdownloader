@@ -20,7 +20,7 @@ class avideo:
 
     def ask_download(self):
         os.system("cls" if os.name == "nt" else "clear")
-        user_input = User.get_int_input("1: Video\n2: Audio\nChoose by number: ", [1, 2])
+        user_input = User.get_int_input("1: Video\n2: Audio\n\nChoose by number: ", [1, 2])
         print("\n")
         
         if user_input == 1:

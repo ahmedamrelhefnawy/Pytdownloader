@@ -18,8 +18,8 @@ from libs.modules.pytube.exceptions import VideoPrivate, VideoUnavailable, AgeRe
 def download_playlist():
     while True:
         try:
-            user_input = input("Enter Playlist URL: ")
-            print("Loading Playlist...")
+            user_input = input("\nEnter Playlist URL: ")
+            print("\nLoading Playlist...\n")
             chosen_playlist = aplaylist(Playlist(user_input))
             
             download_format = chosen_playlist.choose_format()
@@ -29,7 +29,7 @@ def download_playlist():
         except:
             print(f"\n{'*'*59}\nInvalid playlist URL, Please try again...\n{'*'*59}\n")
         finally:
-            user_input = User.get_bool_input("Download Another Playlist? (Y/n): ")
+            user_input = User.get_bool_input("\nDownload Another Playlist? (Y/n): ")
             if user_input == False:
                 return
 
@@ -60,7 +60,7 @@ def download_video():
             print(f"\n{'*'*59}\nInvalid video URL, Please try again...\n{'*'*59}\n")
             
         finally:
-            user_input = User.get_bool_input("Download Another Video? (Y/n): ")
+            user_input = User.get_bool_input("\nDownload Another Video? (Y/n): ")
             if user_input == False:
                 break
         

@@ -30,7 +30,7 @@ class aplaylist:
 
     def choose_format(self):
         user_input = User.get_int_input(
-            "1: Video\n2: Audio\nChoose by number: ", [1, 2])
+            "1: Video\n2: Audio\n\nChoose by number: ", [1, 2])
 
         if user_input == 1:
             return 'video'
@@ -40,7 +40,7 @@ class aplaylist:
     def ask_download_mode(self, dl_format: str):
         os.system("cls" if os.name == "nt" else "clear")
         chosen_function = User.get_int_input(
-            "1: Download all videos\n2: Download range of videos\n3: Select Videos\nChoose by number: ", [1, 2, 3])
+            "1: Download all videos\n2: Download range of videos\n3: Select Videos\n\nChoose by number: ", [1, 2, 3])
 
         os.system("cls" if os.name == "nt" else "clear")
 
@@ -97,7 +97,7 @@ class aplaylist:
     def ask_selective_download(self, dl_format: str):
 
         user_input = input(
-            "Select videos (Type their numbers in the playlist with spaces in between): ").split()
+            "\nSelect videos (Type their numbers in the playlist with spaces in between): ").split()
 
         # Saving indices
         selected_indices = []
@@ -108,7 +108,7 @@ class aplaylist:
         # Making sure
         self.print_selected_videos(selected_indices)
 
-        if User.get_bool_input("Are these the videos you have selected ? (Y/n): "):
+        if User.get_bool_input("\nAre these the videos you have selected ? (Y/n): "):
 
             print("\nLoading data, Please wait...")
 
@@ -133,9 +133,11 @@ class aplaylist:
             url = self.video_urls[indices_list[index]]
             video = avideo(YouTube(url=url, on_progress_callback=on_progress))
 
-            print(f"Downloading: {video.title} [video: {
+            print(f"\n\nDownloading: {video.title}\n[video: {
                   index + 1} from {length}]")
             video.download(chosen_stream)
+        
+        print("\n\n- All videos are successfully downloaded -\n".center(60))
 
     def print_range_of_videos(self, indices_list: list[int]):
         if len(indices_list) < 7:
@@ -188,7 +190,7 @@ class aplaylist:
 
         self.print_streams(streams)
         user_input = User.get_int_input(
-            "Choose a stream: ", range(1, len(streams)+1))
+            "\nChoose a stream: ", range(1, len(streams)+1))
         return streams[user_input - 1]
 
 
