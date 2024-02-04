@@ -5,3 +5,4 @@ temp
 *.code-workspace
 Shared Libs
 old_libs
+.gitignore
