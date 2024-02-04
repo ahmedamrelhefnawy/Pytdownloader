@@ -38,8 +38,8 @@ def download_playlist():
 def download_video():
     while True:
         try:
-            user_input = input("Enter video URL: ")
-            print("Loading Video...")
+            user_input = input("\nEnter video URL: ")
+            print("\nLoading Video...")
 
             chosen_video = avideo(YouTube(user_input))
             chosen_video.ask_download()

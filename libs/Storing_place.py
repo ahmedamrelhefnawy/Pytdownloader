@@ -24,7 +24,7 @@ class Place:
     def change_place():
         
         import sys
-        from PyQt5.QtWidgets import QFileDialog, QApplication
+        from .modules.PyQt5.QtWidgets import QFileDialog, QApplication
         
         app = QApplication(sys.argv)
         
@@ -39,7 +39,7 @@ class Place:
     @staticmethod
     def change_default():
         import sys
-        from PyQt5.QtWidgets import QFileDialog, QApplication
+        from .modules.PyQt5.QtWidgets import QFileDialog, QApplication
         
         app = QApplication(sys.argv)
         
