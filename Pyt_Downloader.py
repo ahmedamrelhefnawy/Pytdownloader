@@ -14,7 +14,7 @@ from libs.aplaylist import aplaylist
 from libs.avideo import avideo
 from libs.modules.pytube import YouTube,Playlist
 from libs.modules.pytube.exceptions import VideoPrivate, VideoUnavailable, AgeRestrictedError, MembersOnly
-
+from libs.on_progress import on_progress
 def download_playlist():
     while True:
         try:
@@ -41,7 +41,7 @@ def download_video():
             user_input = input("\nEnter video URL: ")
             print("\nLoading Video...")
 
-            chosen_video = avideo(YouTube(user_input))
+            chosen_video = avideo(YouTube(user_input, on_progress_callback= on_progress))
             chosen_video.ask_download()
             break
         except AgeRestrictedError:
