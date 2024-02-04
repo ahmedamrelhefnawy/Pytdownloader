@@ -12,7 +12,7 @@ a **Python** based script made using **PyTube** Library to help everyone downloa
 ![](https://i.imgur.com/WlVz4X0.png)
 - Extract it using any program like: [Winrar](https://www.win-rar.com/start.html?&L=0)
 ### How to use:
-1. After intalling **Python** as shown below, download all the files
+1. Install **Python** as shown below
 2. Run **Pyt_Downloader.py** file using **Python**
 or using any **IDE**
 3. Choose any task by typing its corresponding number
