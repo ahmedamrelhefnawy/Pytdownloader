@@ -36,6 +36,7 @@ class avideo:
             range(1, len(self.video_streams) + 1))
 
         Place.ask_change_place()
+        print("\nPlease wait...")
         
         self.download_video(self.video_streams[chosen_index - 1])
 
@@ -47,6 +48,7 @@ class avideo:
             range(1, len(self.audio_streams) + 1))
 
         Place.ask_change_place()
+        print("\nPlease wait...")
 
         self.download_audio(self.audio_streams[chosen_index - 1])
 

@@ -63,6 +63,9 @@ class aplaylist:
         # Asking the user to choose a stream
         chosen_stream = self.ask_choose_stream(common_streams)
 
+        Place.ask_change_place()
+        print("\nPlease wait...")
+        
         # Downloading selected items
         self.download_videos(chosen_stream, range(len(self.length)))
 
@@ -88,6 +91,8 @@ class aplaylist:
             # Asking the user to choose a stream
             chosen_stream = self.ask_choose_stream(common_streams)
 
+            Place.ask_change_place()
+            print("\nPlease wait...")
             # Downloading selected items
             self.download_videos(chosen_stream, range(user_from - 1, user_to))
 
@@ -119,6 +124,9 @@ class aplaylist:
             # Asking the user to choose a stream
             chosen_stream = self.ask_choose_stream(common_streams)
 
+            Place.ask_change_place()
+            print("\nPlease wait...")
+            
             # Downloading selected items
             self.download_videos(chosen_stream, selected_indices)
         else:
