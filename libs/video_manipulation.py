@@ -1,5 +1,5 @@
 import os, sys
-from .modules.moviepy.editor import VideoFileClip, AudioFileClip 
+from moviepy.editor import VideoFileClip, AudioFileClip 
 
 def combine_video_audio(video_file, audio_file):
     

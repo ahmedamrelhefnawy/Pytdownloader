@@ -2,22 +2,32 @@
 import os
 import sys
 
+# Adding modules path
 parent_dir = os.path.abspath(os.path.dirname(__file__))
 modules_dir = os.path.join(parent_dir, r'libs\modules')
 
 sys.path.append(modules_dir)
 
-# Importing modules
-from libs.User import User
-from libs.Storing_place import Place
-from libs.aplaylist import aplaylist
-from libs.avideo import avideo
-from libs.modules.pytube import YouTube,Playlist
-from libs.modules.pytube.exceptions import VideoPrivate, VideoUnavailable, AgeRestrictedError, MembersOnly
-from libs.on_progress import on_progress
+try:
+    # Importing modules
+    from libs.User import User
+    from libs.Storing_place import Place
+    from libs.aplaylist import aplaylist
+    from libs.avideo import avideo
+    from pytube import YouTube,Playlist
+    from pytube.exceptions import VideoPrivate, VideoUnavailable, AgeRestrictedError, MembersOnly
+    from libs.on_progress import on_progress
+
+except ModuleNotFoundError:
+    import subprocess
+
+    # Installing required libraries
+    subprocess.run([r"installer.bat"])
+    
+    
 def download_playlist():
     while True:
-        try:
+        # try:
             user_input = input("\nEnter Playlist URL: ")
             print("\nLoading Playlist...\n")
             chosen_playlist = aplaylist(Playlist(user_input))
@@ -26,13 +36,12 @@ def download_playlist():
             chosen_playlist.ask_download_mode(download_format)
             
             break
-        except:
-            print(f"\n{'*'*59}\nInvalid playlist URL, Please try again...\n{'*'*59}\n")
-        finally:
-            user_input = User.get_bool_input("\nDownload Another Playlist? (Y/n): ")
-            if user_input == False:
-                return
-
+        # except:
+        #     print(f"\n{'*'*59}\nCouldn't reach the playlist, Please try again...\n{'*'*59}\n")
+        # finally:
+        #     user_input = User.get_bool_input("\nDownload Another Playlist? (Y/n): ")
+        #     if user_input == False:
+        #         return
 
 
 def download_video():
@@ -57,7 +66,7 @@ def download_video():
             print(f"\n{'*'*59}\n{'Selected Video is for Members Only :"")'.center(59)}\n{'*'*59}\n")
             
         except:
-            print(f"\n{'*'*59}\nInvalid video URL, Please try again...\n{'*'*59}\n")
+            print(f"\n{'*'*59}\n Couldn't reach the video, Please try again...\n{'*'*59}\n")
             
         finally:
             user_input = User.get_bool_input("\nDownload Another Video? (Y/n): ")
@@ -101,10 +110,7 @@ def start_download():
             
             user_input = User.get_int_input("\nChoose another Option: ",[1, 2, 3, 4])
             
-        elif user_input == 4:
-            exit()
-
         else:
-            user_input = User.get_int_input("\nPlease enter a valid choice number: ",[1, 2, 3, 4])
+            exit()
 
 start_download()

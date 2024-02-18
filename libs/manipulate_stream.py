@@ -1,4 +1,4 @@
-from .modules.pytube import Stream
+from pytube import Stream
 from .Storing_place import Place
 
 class Manipulate_stream:

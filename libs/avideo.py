@@ -1,6 +1,6 @@
 import os
 from .User import User
-from .modules.pytube import YouTube, Stream
+from pytube import YouTube, Stream
 from .manipulate_stream import Manipulate_stream
 from .Storing_place import Place
 

@@ -2,7 +2,7 @@ import os
 
 from .User import User
 
-from .modules.pytube import Playlist, YouTube, Stream
+from pytube import Playlist, YouTube, Stream
 from .avideo import avideo
 from .manipulate_stream import Manipulate_stream
 
@@ -166,7 +166,7 @@ class aplaylist:
 
         common_streams = []
 
-        for index in (selected_indices[0], selected_indices[len(selected_indices)//2], selected_indices[-1]):
+        for index in (selected_indices[0], selected_indices[len(selected_indices)//2], selected_indices[-3]):
             for stream in avideo(self.videos[index]).get_available_streams(dl_format):
 
                 if not self.stream_itag_exist(stream, common_streams):
