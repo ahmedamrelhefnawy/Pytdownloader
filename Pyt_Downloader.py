@@ -8,21 +8,26 @@ modules_dir = os.path.join(parent_dir, r'libs\modules')
 
 sys.path.append(modules_dir)
 
-try:
-    # Importing modules
-    from libs.User import User
-    from libs.Storing_place import Place
-    from libs.aplaylist import aplaylist
-    from libs.avideo import avideo
-    from pytube import YouTube,Playlist
-    from pytube.exceptions import VideoPrivate, VideoUnavailable, AgeRestrictedError, MembersOnly
-    from libs.on_progress import on_progress
+while True:
+    try:
+        # Importing modules
+        from libs.User import User
+        from libs.Storing_place import Place
+        from libs.aplaylist import aplaylist
+        from libs.avideo import avideo
+        from pytube import YouTube,Playlist
+        from pytube.exceptions import VideoPrivate, VideoUnavailable, AgeRestrictedError, MembersOnly
+        from libs.on_progress import on_progress
 
-except ModuleNotFoundError:
-    import subprocess
+        break
+    
+    except ModuleNotFoundError:
+        import subprocess
 
-    # Installing required libraries
-    subprocess.run([r"installer.bat"])
+        # Installing required libraries
+        subprocess.run([r"installer.bat"])
+        
+    
     
     
 def download_playlist():
