@@ -29,7 +29,7 @@ while True:
 
 def download_playlist():
     while True:
-        # try:
+        try:
             user_input = input("\nEnter Playlist URL: ")
             print("\nLoading Playlist...\n")
             chosen_playlist = aplaylist(Playlist(user_input))
@@ -38,12 +38,12 @@ def download_playlist():
             chosen_playlist.ask_download_mode(download_format)
             
             break
-        # except:
-        #     print(f"\n{'*'*59}\nCouldn't reach the playlist, Please try again...\n{'*'*59}\n")
-        # finally:
-        #     user_input = User.get_bool_input("\nDownload Another Playlist? (Y/n): ")
-        #     if user_input == False:
-        #         return
+        except:
+            print(f"\n{'*'*59}\nCouldn't reach the playlist, Please try again...\n{'*'*59}\n")
+        finally:
+            user_input = User.get_bool_input("\nDownload Another Playlist? (Y/n): ")
+            if user_input == False:
+                return
 
 
 def download_video():
