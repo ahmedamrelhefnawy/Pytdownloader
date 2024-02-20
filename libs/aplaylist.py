@@ -132,7 +132,7 @@ class aplaylist:
         else:
             self.ask_selective_download(dl_format)
 
-    def download_videos(self, chosen_stream: Stream, indices_list: list[int]):
+    def download_videos(self, chosen_stream: Stream, indices_list: 'list[int]'):
 
         length = len(indices_list)
 
@@ -141,20 +141,18 @@ class aplaylist:
             url = self.video_urls[indices_list[index]]
             video = avideo(YouTube(url=url, on_progress_callback=on_progress))
 
-            print(f"\n\nDownloading: {video.title}\n[video: {
-                  index + 1} from {length}]")
+            print(f"\n\nDownloading: {video.title}\n[video: {index + 1} from {length}]")
             video.download(chosen_stream)
         
         print("\n\n- All videos are successfully downloaded -\n".center(60))
 
-    def print_range_of_videos(self, indices_list: list[int]):
+    def print_range_of_videos(self, indices_list: 'list[int]'):
         if len(indices_list) < 7:
             self.print_selected_videos(indices_list)
         else:
-            print(f"\nFrom Video: {self.videos[indices_list[0]].title}\n.\n.\n{self.videos[indices_list[len(
-                indices_list)//2]].title}\n.\n.\nTo Video: {self.videos[indices_list[-1]].title}")
+            print(f"\nFrom Video: {self.videos[indices_list[0]].title}\n.\n.\n{self.videos[indices_list[len(indices_list)//2]].title}\n.\n.\nTo Video: {self.videos[indices_list[-1]].title}")
 
-    def print_selected_videos(self, indices_list: list[int]):
+    def print_selected_videos(self, indices_list: 'list[int]'):
         selected_videos = []
         for index in sorted(set(indices_list)):
             video_of_index = self.videos[index]
@@ -162,7 +160,7 @@ class aplaylist:
 
         return selected_videos
 
-    def get_common_streams(self, selected_indices: list[int], dl_format: str) -> list[Stream]:
+    def get_common_streams(self, selected_indices: 'list[int]', dl_format: str) -> 'list[Stream]':
 
         common_streams = []
 
@@ -178,7 +176,7 @@ class aplaylist:
             else:
                 return sorted(common_streams, key=lambda stream: int(stream.abr[:-4]))[::-1]
 
-    def print_streams(self, streams: list[Stream]):
+    def print_streams(self, streams: 'list[Stream]'):
 
         os.system("cls" if os.name == "nt" else "clear")
 
@@ -186,7 +184,7 @@ class aplaylist:
             print(
                 f"{str(i + 1).zfill(2)}: {Manipulate_stream.stream_info(streams[i], False)}")
 
-    def stream_itag_exist(self, test_stream: Stream, list_of_streams: list[Stream]) -> bool:
+    def stream_itag_exist(self, test_stream: Stream, list_of_streams: 'list[Stream]') -> bool:
 
         for stream in list_of_streams:
             if stream.itag == test_stream.itag:
@@ -194,7 +192,7 @@ class aplaylist:
 
         return False
 
-    def ask_choose_stream(self, streams: list[Stream]) -> Stream:
+    def ask_choose_stream(self, streams: 'list[Stream]') -> Stream:
 
         self.print_streams(streams)
         user_input = User.get_int_input(

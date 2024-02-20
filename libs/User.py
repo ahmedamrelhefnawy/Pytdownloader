@@ -3,13 +3,13 @@ class User:
     u_input = 'False'
 
     @staticmethod
-    def get_int_input(message: str, u_range: list[int] or range) -> int:
+    def get_int_input(message: str, u_range: 'list[int]') -> int:
         User.u_input = input(message)
         User.__int_check(u_range)
 
         return int(User.u_input)
 
-    def __int_check(u_range: list[int] or range) -> None:
+    def __int_check(u_range: 'list[int]') -> None:
         while True:
             try:
                 if int(User.u_input.strip().lower()) in u_range:

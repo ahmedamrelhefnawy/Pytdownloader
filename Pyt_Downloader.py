@@ -22,14 +22,11 @@ while True:
         break
     
     except ModuleNotFoundError:
-        import subprocess
-
-        # Installing required libraries
-        subprocess.run([r"installer.bat"])
+        from libs.packages_installer import installer
         
-    
-    
-    
+        # Installing required libraries
+        installer.install_requirements()
+
 def download_playlist():
     while True:
         # try:
@@ -68,7 +65,7 @@ def download_video():
             print(f"\n{'*'*59}\n{'Selected Video is Unavailable'.center(59)}\n{'*'*59}\n")
             
         except MembersOnly:
-            print(f"\n{'*'*59}\n{'Selected Video is for Members Only :"")'.center(59)}\n{'*'*59}\n")
+            print(f"\n{'*'*59}\n{'Selected Video is for Members Only .'.center(59)}\n{'*'*59}\n")
             
         except:
             print(f"\n{'*'*59}\n Couldn't reach the video, Please try again...\n{'*'*59}\n")
