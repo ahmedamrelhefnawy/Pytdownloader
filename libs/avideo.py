@@ -3,6 +3,7 @@ from .User import User
 from pytube import YouTube, Stream
 from .manipulate_stream import Manipulate_stream
 from .Storing_place import Place
+from .video_manipulation import combine_video_audio
 
 
 class avideo:
@@ -126,11 +127,10 @@ class avideo:
         audio_name = f"audio.{audio.subtype}"
         audio.download(output_path=Place.place, filename=audio_name)
 
-        from .video_manipulation import combine_video_audio
         combine_video_audio(
             video_file=video_path,
-            audio_file=f"{Place.place}/{audio_name}", bitrate=stream.bitrate
-        )
+            audio_file=f"{Place.place}/{audio_name}",
+            vbitrate= stream.bitrate)
 
     def print_video_streams(self):
 

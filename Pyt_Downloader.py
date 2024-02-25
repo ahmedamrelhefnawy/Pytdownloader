@@ -40,13 +40,12 @@ def download_playlist():
             download_format = chosen_playlist.choose_format()
             chosen_playlist.ask_download_mode(download_format)
             
-            break
         except:
             print(f"\n{'*'*59}\nError while downloading the playlist, Please try again...\n{'*'*59}\n")
-        finally:
-            user_input = User.get_bool_input("\nDownload Another Playlist? (Y/n): ")
-            if user_input == False:
-                return
+
+        user_input = User.get_bool_input("\nDownload Another Playlist? (Y/n): ")
+        if user_input == False:
+            return
 
 
 def download_video():
@@ -57,7 +56,7 @@ def download_video():
 
             chosen_video = avideo(YouTube(user_input, on_progress_callback= on_progress))
             chosen_video.ask_download()
-            break
+            
         except AgeRestrictedError:
             print(f"\n{'*'*59}\n{'Age Restricted Video'.center(59)}\n{'*'*59}\n")
             
@@ -69,12 +68,10 @@ def download_video():
             
         except:
             print(f"\n{'*'*59}\n Error while downloading the video\n{'*'*59}\n")
-            
-        finally:
-            user_input = User.get_bool_input("\nDownload Another Video? (Y/n): ")
-            if user_input == False:
-                break
         
+        user_input = User.get_bool_input("\nDownload Another Video? (Y/n): ")
+        if user_input == False:
+            break
     
 
 
