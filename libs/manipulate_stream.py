@@ -35,21 +35,3 @@ class Manipulate_stream:
         is_adaptive = stream.is_adaptive
         
         return f"{abr.center(7)} - {extension.ljust(5)}  {f"Size: {size_mb} MB  " if print_size == True else ''}"
-    
-    # @staticmethod
-    # def download_stream_printed(stream: Stream):
-    #     print(f"\nDownloading {stream.title}...")
-    #     Manipulate_stream.download_stream(stream)
-    
-    # @staticmethod
-    # def download_stream(stream: Stream):
-    #     stream.download(output_path= Place.place)
-    
-    
-if __name__ == "__main__":
-    from modules.pytube import YouTube
-    
-    yt = YouTube('https://youtu.be/icKJtjAzfNo')
-    print(yt.streams.all())
-    # itag = input(":  : ")
-    print(Manipulate_stream.stream_info(yt.streams.get_by_itag(251)))

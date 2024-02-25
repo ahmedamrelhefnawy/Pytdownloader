@@ -1,7 +1,7 @@
 import os, sys
 from moviepy.editor import VideoFileClip, AudioFileClip 
 
-def combine_video_audio(video_file, audio_file):
+def combine_video_audio(video_file, audio_file, bitrate):
     
     video_stream = VideoFileClip(video_file.replace(r'\\', '/'))
     audio_stream = AudioFileClip(audio_file)
@@ -15,7 +15,7 @@ def combine_video_audio(video_file, audio_file):
     final_video = video_stream.set_audio(audio_stream)
     
     # Export the final video with audio
-    final_video.write_videofile(output_file_path)
+    final_video.write_videofile(output_file_path, bitrate= str(bitrate))
     remove_last_line()
     
     # Cleaning
@@ -29,4 +29,4 @@ def remove_last_line():
     sys.stdout.write("\033[K")  # Clear the line
     
 if __name__ == "__main__":
-    combine_video_audio("C:/Users/ahmed/Desktop/temp/video.mp4", "C:/Users/ahmed/Desktop/temp/audio.mp4","How Old Are Your Ears (Hearing Test)")
+    combine_video_audio("D:/temp/myvideo.webm", "D:/temp/audio - Copy.mp4", 16417551)

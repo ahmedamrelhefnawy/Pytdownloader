@@ -4,12 +4,15 @@ from pytube import YouTube, Stream
 from .manipulate_stream import Manipulate_stream
 from .Storing_place import Place
 
+
 class avideo:
 
     def __init__(self, yt_obj: YouTube):
         self.yt = yt_obj
-        self.video_streams = yt_obj.streams.filter(type= "video").order_by("resolution")[::-1]
-        self.audio_streams = yt_obj.streams.filter(type= "audio").order_by("abr")[::-1]
+        self.video_streams = yt_obj.streams.filter(
+            type="video").order_by("resolution")[::-1]
+        self.audio_streams = yt_obj.streams.filter(
+            type="audio").order_by("abr")[::-1]
         self.title = yt_obj.title
         self.author = yt_obj.author
         self.length = yt_obj.length
@@ -20,9 +23,10 @@ class avideo:
 
     def ask_download(self):
         os.system("cls" if os.name == "nt" else "clear")
-        user_input = User.get_int_input("1: Video\n2: Audio\n\nChoose by number: ", [1, 2])
+        user_input = User.get_int_input(
+            "1: Video\n2: Audio\n\nChoose by number: ", [1, 2])
         print("\n")
-        
+
         if user_input == 1:
             self.ask_download_video()
         else:
@@ -32,20 +36,18 @@ class avideo:
         os.system("cls" if os.name == "nt" else "clear")
         self.print_video_streams()
 
-        chosen_index = User.get_int_input("\nSelect a format: ",
-            range(1, len(self.video_streams) + 1))
+        chosen_index = User.get_int_input("\nSelect a format: ", range(1, len(self.video_streams) + 1))
 
         Place.ask_change_place()
         print("\nPlease wait...")
-        
+
         self.download_video(self.video_streams[chosen_index - 1])
 
     def ask_download_audio(self):
         os.system("cls" if os.name == "nt" else "clear")
         self.print_audio_streams()
-        
-        chosen_index = User.get_int_input("\nSelect a format: ",
-            range(1, len(self.audio_streams) + 1))
+
+        chosen_index = User.get_int_input("\nSelect a format: ", range(1, len(self.audio_streams) + 1))
 
         Place.ask_change_place()
         print("\nPlease wait...")
@@ -114,22 +116,21 @@ class avideo:
         return f"Downloading {Manipulate_stream.stream_info(closest_quality_stream)}"
 
     def download_adaptive(self, stream: Stream):
-        
+
         # Downloading video and saving its path
         video_path = stream.download(output_path=Place.place)
         video_path = video_path.replace("\\", '/')
-        
+
         # Downloading audio and saving its path
         audio = self.yt.streams.get_audio_only()
         audio_name = f"audio.{audio.subtype}"
-        audio.download(output_path=Place.place, filename= audio_name)
-        
-        
+        audio.download(output_path=Place.place, filename=audio_name)
+
         from .video_manipulation import combine_video_audio
         combine_video_audio(
-                            video_file= video_path,
-                            audio_file= f"{Place.place}/{audio_name}",
-                            )
+            video_file=video_path,
+            audio_file=f"{Place.place}/{audio_name}", bitrate=stream.bitrate
+        )
 
     def print_video_streams(self):
 
@@ -149,9 +150,11 @@ class avideo:
         else:
             return self.audio_streams
 
+
 if __name__ == "__main__":
-    
+
     from on_progress import on_progress
-    yt = YouTube("https://www.youtube.com/watch?v=VxcbppCX6Rk", on_progress_callback= on_progress)
+    yt = YouTube("https://www.youtube.com/watch?v=VxcbppCX6Rk",
+                 on_progress_callback=on_progress)
     my_video = avideo(yt)
     my_video.ask_download()
