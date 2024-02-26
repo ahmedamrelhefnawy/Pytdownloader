@@ -34,7 +34,7 @@ a **Python** based script made using **PyTube** Library to help everyone downloa
   [Download Python](https://www.python.org/downloads/)
 
 - **IMPORTANT:**
-  - At the beginning of installing **Python**, make sure to check **add python path**
+  - At the beginning of installing **Python**, make sure to check **add python.exe to path**
     ![](https://i.imgur.com/xm7xOPV.png)
   
   - At the final step of the installation process, Don't forget to press the button of **Disable path length limit**
