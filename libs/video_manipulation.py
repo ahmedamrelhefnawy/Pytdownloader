@@ -30,10 +30,5 @@ def remove_last_line():
     sys.stdout.write("\033[F")  # Move cursor up one line
     sys.stdout.write("\033[K")  # Clear the line
 
-def get_video_bitrate(video_object: VideoFileClip):
-    return int(os.path.getsize(video_object.filename)/video_object.duration*8)
-
-def get_audio_bitrate(audio_object: AudioFileClip):
-    return int(os.path.getsize(audio_object.filename)/audio_object.duration*8)
 if __name__ == "__main__":
     combine_video_audio("D:/temp/myvideo.webm", "D:/temp/audio - Copy.mp4", '16417551')
