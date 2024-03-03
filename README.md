@@ -32,7 +32,7 @@ a **Python** based script made using **PyTube** Library to help everyone downloa
 
 - Having Python installed on your computer system
   [Download Python](https://www.python.org/downloads/)
-
+- **Advanced Note:** *Using Anaconda is not Preferred*
 - **IMPORTANT:**
   - At the beginning of installing **Python**, make sure to check **add python.exe to path**
     ![](https://i.imgur.com/xm7xOPV.png)
