@@ -1,34 +1,13 @@
 # Appending libs path
 import os
 import sys
-
-# Adding modules path
-parent_dir = os.path.abspath(os.path.dirname(__file__))
-modules_dir = os.path.join(parent_dir, r'libs\modules')
-
-sys.path.append(modules_dir)
-
-while True:
-    try:
-        # Importing modules
-        from pytube import YouTube,Playlist
-        import moviepy
-        import PyQt5
-        
-    except ModuleNotFoundError:
-        from libs.packages_installer import installer
-        
-        # Installing required libraries
-        installer.install_requirements()
-    
-    finally:
-        from pytube.exceptions import VideoPrivate, VideoUnavailable, AgeRestrictedError, MembersOnly
-        from libs.User import User
-        from libs.Storing_place import Place
-        from libs.aplaylist import aplaylist
-        from libs.avideo import avideo
-        from libs.on_progress import on_progress
-        break
+from pytubefix import YouTube,Playlist
+from pytubefix.exceptions import VideoPrivate, VideoUnavailable, AgeRestrictedError, MembersOnly
+from libs.User import User
+from libs.Storing_place import Place
+from libs.aplaylist import aplaylist
+from libs.avideo import avideo
+from libs.on_progress import on_progress
 
 def download_playlist():
     while True:
@@ -66,14 +45,12 @@ def download_video():
         except VideoUnavailable:
             print(f"\n{'*'*59}\n{'Selected Video is Unavailable'.center(59)}\n{'*'*59}\n")
             
-        except:
-            print(f"\n{'*'*59}\n Error while downloading the video\n{'*'*59}\n")
+        except Exception as e:
+            print(f"\n{'*'*59}\n Error while downloading the video\n{e}\n{'*'*59}\n")
         
         user_input = User.get_bool_input("\nDownload Another Video? (Y/n): ")
         if user_input == False:
             break
-    
-
 
 
 # Start

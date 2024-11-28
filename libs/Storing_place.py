@@ -1,12 +1,18 @@
 import os
+from sys import exception
 from .User import User
         
 class Place:
     """on_complete_Callback function"""
     """Choosing the place of storing youtube videos, and changing this place whenever wanted."""
+    try:
+        place = open("./cache/configuration",'r').readline().strip() if open("./cache/configuration",'r').readline() else os.path.join(os.path.expanduser("~"), "Desktop")
+    except FileNotFoundError:
+        os.makedirs("./cache", exist_ok=True)
+        with open("./cache/configuration", 'w') as file:
+            file.write(os.path.join(os.path.expanduser("~"), "Desktop"))
+        place = os.path.join(os.path.expanduser("~"), "Desktop")
     
-    place = open("./cache/configuration",'r').readline().strip() if open("./cache/configuration",'r').readline() else os.path.join(os.path.expanduser("~"), "Desktop")
-
     @staticmethod
     def open_folder(chunk, chunk_):
         

@@ -7,3 +7,6 @@ Shared Libs
 old_libs
 .gitignore
 .venv
+build
+binaries
+./cache/configuration
