@@ -2,7 +2,7 @@ import os
 
 from .User import User
 
-from pytube import Playlist, YouTube, Stream
+from pytubefix import Playlist, YouTube, Stream
 from .avideo import avideo
 from .manipulate_stream import Manipulate_stream
 
@@ -67,7 +67,7 @@ class aplaylist:
         print("\nPlease wait...")
         
         # Downloading selected items
-        self.download_videos(chosen_stream, range(len(self.length)))
+        self.download_videos(chosen_stream, range(self.length))
 
     def ask_range_download(self, dl_format):
 

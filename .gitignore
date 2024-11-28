@@ -6,3 +6,4 @@ temp
 Shared Libs
 old_libs
 .gitignore
+.venv

@@ -1,6 +1,6 @@
 # Pyt Downloader
 
-a **Python** based script made using **PyTube** Library to help everyone download any video, playlist or audio at any format from **YouTube**:
+a **Python** based script made using **pytubefix** Library to help everyone download any video, playlist or audio at any format from **YouTube**:
 
 - Easily
 - Directly
@@ -44,6 +44,6 @@ a **Python** based script made using **PyTube** Library to help everyone downloa
 
 ## Used modules and libraries:
 
-- [Pytube](https://pytube.io/en/latest/)
+- [pytubefix](https://pytubefix.io/en/latest/)
 - [Moviepy](https://pypi.org/project/moviepy/)
 - [PyQt5](https://pypi.org/project/PyQt5/#:~:text=PyQt5%20is%20a%20comprehensive%20set,platforms%20including%20iOS%20and%20Android.)
